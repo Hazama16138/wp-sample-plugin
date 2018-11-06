@@ -1,6 +1,6 @@
 <?php
 /*
-Plugin Name: WordPress Sample Plugin
+Plugin Name: WordPress Sample Plugin Backup
 Plugin URI: https://github.com/Hazama16138/wp-sample-plugin
 Description: WordPress Plugin sample build.
 Version: 1.0.0

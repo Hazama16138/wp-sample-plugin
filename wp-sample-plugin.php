@@ -40,7 +40,9 @@ class Sample_Plugin {
 	* @since   1.0.0
 	*/
 	public function admin_init() {
-		wp_register_style( 'sample-plugin-style', plugins_url( 'css/style.css', __FILE__ ), array(), '1.0.0' );
+		require_once( plugin_dir_path( __FILE__ ) . 'includes/wp-sample-admin-db.php' );
+		$db = new Sample_Plugin_Admin_Db();
+		$db->create_table(); 
 	}
 
 	/**
