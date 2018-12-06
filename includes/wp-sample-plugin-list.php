@@ -27,13 +27,14 @@
 	 	* @param   Sample_Plugin_Admin_Db $db
 		*/
 		private function page_render( $db ) {
+			$post_url = admin_url() . 'admin.php?page=wp-sample-plugin%2Fincludes/wp-sample-plugin-post.php';
 			$html = '<div class="wrap">';
 			$html.= '<h1 class="wp-heading-inline">サンプル一覧</h1>';
 			$html.= '<a href="" class="page-title-action">新規追加</a>';
 			
 			$html.= '<table>';
 			$html.= '<tr>';
-			$html.= '<th>画像</th><th>画像ALT属性</th><th>表示方法</th><th>絞り込み</th>';
+			$html.= '<th>画像</th><th>画像ALT属性</th><th>表示方法</th><th>絞り込み</th><th>&nbsp;</th>';
 			$html.= '</tr>';
 			
 			$results = $db->get_list_options();
@@ -50,9 +51,7 @@
 					$html .= '<td>';
 					$html .= $row->how_display;
 					$html .= '</td>';
-					$html .= '<td>';
-					$html .= $row->filter_category;
-					$html .= '</td>';
+					$html .= '<td><a href="' . $post_url . '&id=' . $row->id . '">編集</a></td>';
 					$html .= '</tr>';
 				}
 			} else {
