@@ -17,7 +17,6 @@
 		public function __construct() {
 			$db = new Sample_Plugin_Admin_Db();
 			$args = $db->get_option( $_GET['id'] );
-			var_dump( $args );
 			//$db->insert_options( $_POST );
 
 			$this->page_render( $args );

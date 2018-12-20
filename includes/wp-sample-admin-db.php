@@ -177,7 +177,7 @@
 	* @since   1.0.0
 	* @param   integer $id
 	*/
-	public function delete_options( array $id ){
+	public function delete_options( $id ){
 		global $wpdb;
 		
 		$key = array( 'id' => $id );
