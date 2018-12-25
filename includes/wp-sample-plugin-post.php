@@ -16,10 +16,36 @@
 		*/
 		public function __construct() {
 			$db = new Sample_Plugin_Admin_Db();
-			$args = $db->get_option( $_GET['id'] );
-			//$db->insert_options( $_POST );
-
-			$this->page_render( $args );
+			
+			$options = array(
+				'id'                   => '',
+				'image_url'            => '',
+				'image_alt'            => '',
+				'link_url'             => '',
+				'open_new_tab'         => 0,
+				'insert_element_class' => '',
+				'insert_element_id'    => '',
+				'how_display'          => 'post_bottom',
+				'filter_category'      => '',
+				'category_id'          => 0
+			);
+			
+			if ( isset( $_GET['id'] ) && is_numeric( $_GET['id'] ) ) {
+				$options['id'] = $_GET['id'];
+			}
+			
+			if ( isset( $_POST['sample_id'] ) && is_numeric( $_POST['sample_id'] ) ) {
+				$db->update_options( $_POST );
+				$options['id'] = $_POST['sample_id'];
+			} else {
+				if ( isset( $_POST['sample_id'] ) && $_POST['sample_id'] === '' ) {
+					$options['id'] = $db->insert_options( $_POST );
+				}
+			}
+			$args    = $db->get_option( $options['id'] );
+			$options = array_merge( $options, $args );
+var_dump($options);
+			$this->page_render( $options );
 		}
 		
 		/**
@@ -36,7 +62,7 @@
 			echo $html;
 			
 			$html  = '<form method="post" action="">';
-			$html .= '<input type="hidden" name="sample_id" value="' . $args->id . '">';
+			$html .= '<input type="hidden" name="sample_id" value="' . $args['id'] . '">';
 			
 			$html .= '<h2>バナー設定</h2>';
 			$html .= '<table class="form-table">';
@@ -44,29 +70,29 @@
 			$html .= '<th>画像のURL(必須)</th>';
 			$html .= '<td>';
 			
-			if (isset($args->image_url) ) {
-				$image_src = $args->image_url;
+			if (isset($args['image_url']) ) {
+				$image_src = $args['image_url'];
 			} else {
 				$image_src = plugins_url('../images/no-image.png', __FILE__);
 			}
 			$html .= '<img id="banner-image-view" src="' . $image_src . '" width="200" height="">';
-			$html .= '<input id="banner-image-url" type="text" class="large-text" name="sample-image-url" required value="' . $args->image_url . '">';
+			$html .= '<input id="banner-image-url" type="text" class="large-text" name="sample-image-url" required value="' . $args['image_url'] . '">';
 			$html .= '<button id="media-upload" class="button">画像を選択</button>';
 			$html .= '</td>';
 			$html .= '</tr>';
 			
 			$html .= '<tr>';
 			$html .= '<th>画像 ALT属性</th>';
-			$html .= '<td><input id="banner-image-alt" type="text" class="regular-text" name="sample-image-alt" value="' . $args->image_alt . '"><p class="description">alt属性のテキストを入力します</p></td>';
+			$html .= '<td><input id="banner-image-alt" type="text" class="regular-text" name="sample-image-alt" value="' . $args['image_alt'] . '"><p class="description">alt属性のテキストを入力します</p></td>';
 			$html .= '</tr>';
 			
 			$html .= '<tr>';
 			$html .= '<th>リンク URL</th>';
-			$html .= '<td><input type="text" class="large-text" name="sample-image-link" value="' . $args->link_url . '">';
+			$html .= '<td><input type="text" class="large-text" name="sample-image-link" value="' . $args['link_url'] . '">';
 			$html .= '<p class="description">URLを入力すると、バナー画像にリンクを設定することができます。</p></td>';
 			$html .= '</tr>';
 			
-			if($args->open_new_tab === '1')  {
+			if($args['open_new_tab'] === '1')  {
 				$open_new_tab_checked = ' checked';
 			} else {
 				$open_new_tab_checked = '';
@@ -78,13 +104,13 @@
 			
 			$html .= '<tr>';
 			$html .= '<th>Class名</th>';
-			$html .= '<td><input type="text" class="large-text" name="sample-element-class" value"' . $args->insert_element_class . '">';
+			$html .= '<td><input type="text" class="large-text" name="sample-element-class" value="' . $args['insert_element_class'] . '">';
 			$html .= '<p class="description">バナー画像にクラス（複数可）を追加することができます。「class=""」は不要です。複数設定する場合は、半数スペースで区切ります。</p></td>';
 			$html .= '</tr>';
 			
 			$html .= '<tr>';
 			$html .= '<th>ID名</th>';
-			$html .= '<td><input type="text" class="large-text" name="sample-element-id" value"' . $args->insert_element_id . '">';
+			$html .= '<td><input type="text" class="large-text" name="sample-element-id" value="' . $args['insert_element_id'] . '">';
 			$html .= '<p class="description">バナー画像にIDを追加することができます。「id=""」は不要です。</p></td>';
 			$html .= '</tr>';
 			
@@ -97,7 +123,7 @@
 			$html .= '<td>';
 			
 			$how_display_checked = array('', '');
-			switch ( $args->how_display ) {
+			switch ( $args['how_display'] ) {
 				case 'post_bottom':
 				 $how_display_checked[0] = ' checked';
 				 break; 
@@ -116,7 +142,7 @@
 			$html .= '<th>絞り込み</th>';
 			$html .= '<td>';
 			
-			if($args->filter_category === '1')  {
+			if($args['filter_category'] === '1')  {
 				$filter_category_checked = ' checked';
 			} else {
 				$filter_category_checked = '';
@@ -136,7 +162,7 @@
 			$param = array(
 				'name'         => 'sample-display-category',
 				'hierarchical' => 1,
-				'selected'     => $args->category_id
+				'selected'     => $args['category_id']
 			);
 			wp_dropdown_categories( $param );
 			
