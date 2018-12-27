@@ -44,7 +44,7 @@
 			}
 			$args    = $db->get_option( $options['id'] );
 			$options = array_merge( $options, $args );
-var_dump($options);
+			
 			$this->page_render( $options );
 		}
 		
