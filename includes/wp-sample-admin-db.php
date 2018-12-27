@@ -102,8 +102,8 @@
 			'open_new_tab'         => isset($post['sample-image-target'] ) ? 1 : 0,
 			'insert_element_class' => $post['sample-element-class'],
 			'insert_element_id'    => $post['sample-element-id'],
-			'how_display'          => isset($post['sample-how-display'] ),
-			'filter_category'      => isset($post['sample-fillter-category'] ) ? 1 : 0,
+			'how_display'          => $post['sample-how-display'],
+			'filter_category'      => isset($post['sample-filter-category'] ) ? 1 : 0,
 			'category_id'          => $post['sample-display-category'],
   		'register_date'        => date( 'Y-m-d H:i:s' ),
 			'update_date'          => date( 'Y-m-d H:i:s' )
